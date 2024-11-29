@@ -1,0 +1,30 @@
+# Data parameters
+tickers:
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - META
+start_date: "2020-01-01"
+end_date: "2024-01-01"
+sequence_length: 30
+batch_size: 32
+
+# Model architecture
+noise_dim: 64
+transformer_dim: 64
+n_heads: 1
+n_layers: 2
+dropout: 0.1
+
+# Training parameters
+epochs: 100
+learning_rate_gen: 0.0002
+learning_rate_disc: 0.0002
+beta1: 0.5
+beta2: 0.999
+
+# Data handling
+data_dir: "data"
+checkpoint_dir: "checkpoints"
+cache_data: true

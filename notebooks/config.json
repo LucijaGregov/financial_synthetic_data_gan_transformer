@@ -1,0 +1,35 @@
+{
+    "tickers": ["AAPL", "MSFT", "AMZN", "GOOGL", "MMM"],
+    "features": ["open", "close", "low", "high", "volume"],
+    "start_date": "2020-01-01",
+    "end_date": "2023-12-31",
+    "sequence_length": 10,
+    "epochs": 100,
+    "batch_size": 64, 
+    "noise_scale": 1.5,
+    "max_grad_norm": 0.5,
+    "patience": 10,
+    "seed": 42,
+    "model_params": {
+        "generator": {
+            "num_layers": 2,
+            "d_model": 64,
+            "nhead": 2,
+            "dim_feedforward": 128,
+            "dropout": 0.1
+        },
+        "discriminator": {
+            "hidden_sizes": [128, 64],
+            "dropout": 0.1
+        }
+    },
+    "training_params": {
+        "g_learning_rate": 0.001,
+        "d_learning_rate": 0.001,
+        "adv_weight": 0.1,
+        "scheduler_patience": 3,
+        "scheduler_factor": 0.5,
+        "warmup_epochs": 5,
+        "feature_weights": [1.0, 1.0, 1.0, 1.0, 0.5]
+    }
+}

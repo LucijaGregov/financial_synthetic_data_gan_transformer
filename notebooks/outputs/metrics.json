@@ -1,0 +1,367 @@
+{
+    "AAPL": {
+        "divergences": {
+            "open": {
+                "KL Divergence": 4.2189366621561654e-05,
+                "JS Divergence": 1.0573797568824849e-05
+            },
+            "close": {
+                "KL Divergence": 8.084951806359444e-05,
+                "JS Divergence": 2.0250942432598843e-05
+            },
+            "low": {
+                "KL Divergence": 6.360924107797687e-05,
+                "JS Divergence": 1.5947073817655468e-05
+            },
+            "high": {
+                "KL Divergence": 4.544480705850201e-05,
+                "JS Divergence": 1.1378657327296847e-05
+            },
+            "volume": {
+                "KL Divergence": 0.03173091013282539,
+                "JS Divergence": 0.00773248425212924
+            }
+        },
+        "evaluation_metrics": {
+            "open": {
+                "mse": 2.950663849441146,
+                "correlation": 0.979202628272311,
+                "wasserstein": 0.5107929879683226
+            },
+            "close": {
+                "mse": 5.526272124895424,
+                "correlation": 0.9581479740338452,
+                "wasserstein": 0.36887281731627797
+            },
+            "low": {
+                "mse": 4.2559644361764715,
+                "correlation": 0.9690357552612837,
+                "wasserstein": 0.399794520443047
+            },
+            "high": {
+                "mse": 3.1407392159896053,
+                "correlation": 0.9752211118730785,
+                "wasserstein": 0.3540826503437501
+            },
+            "volume": {
+                "mse": 230325041030588.88,
+                "correlation": 0.42848791944510006,
+                "wasserstein": 3774172.0851063835
+            }
+        },
+        "ks_results": {
+            "open": {
+                "KS Statistic": 0.05673758865248227,
+                "P-value": 0.9778506794449981
+            },
+            "close": {
+                "KS Statistic": 0.05673758865248227,
+                "P-value": 0.9778506794449981
+            },
+            "low": {
+                "KS Statistic": 0.0425531914893617,
+                "P-value": 0.9996013482499542
+            },
+            "high": {
+                "KS Statistic": 0.04964539007092199,
+                "P-value": 0.9953253650035424
+            },
+            "volume": {
+                "KS Statistic": 0.10638297872340426,
+                "P-value": 0.4032998934271217
+            }
+        }
+    },
+    "MSFT": {
+        "divergences": {
+            "open": {
+                "KL Divergence": 4.852915769512926e-05,
+                "JS Divergence": 1.2114559126749145e-05
+            },
+            "close": {
+                "KL Divergence": 9.242637664309914e-05,
+                "JS Divergence": 2.311713524634967e-05
+            },
+            "low": {
+                "KL Divergence": 6.835350148728968e-05,
+                "JS Divergence": 1.710053299693902e-05
+            },
+            "high": {
+                "KL Divergence": 6.497349085198695e-05,
+                "JS Divergence": 1.622075664713449e-05
+            },
+            "volume": {
+                "KL Divergence": 0.053681920248126375,
+                "JS Divergence": 0.012845072007950367
+            }
+        },
+        "evaluation_metrics": {
+            "open": {
+                "mse": 14.46420236622944,
+                "correlation": 0.9852576506124977,
+                "wasserstein": 1.8080681061335497
+            },
+            "close": {
+                "mse": 22.664145402371354,
+                "correlation": 0.9728947739633405,
+                "wasserstein": 1.2361786166368043
+            },
+            "low": {
+                "mse": 16.717651006259924,
+                "correlation": 0.9805211722268555,
+                "wasserstein": 1.2210412802021386
+            },
+            "high": {
+                "mse": 16.359619280782315,
+                "correlation": 0.9797466418247966,
+                "wasserstein": 1.1569868899221902
+            },
+            "volume": {
+                "mse": 89929803114347.86,
+                "correlation": 0.4368042486737021,
+                "wasserstein": 2740985.4468085114
+            }
+        },
+        "ks_results": {
+            "open": {
+                "KS Statistic": 0.12056737588652482,
+                "P-value": 0.2576341214017462
+            },
+            "close": {
+                "KS Statistic": 0.09219858156028368,
+                "P-value": 0.5884400123115365
+            },
+            "low": {
+                "KS Statistic": 0.09929078014184398,
+                "P-value": 0.49187771669924835
+            },
+            "high": {
+                "KS Statistic": 0.07801418439716312,
+                "P-value": 0.78608531010861
+            },
+            "volume": {
+                "KS Statistic": 0.1276595744680851,
+                "P-value": 0.20113944162965236
+            }
+        }
+    },
+    "AMZN": {
+        "divergences": {
+            "open": {
+                "KL Divergence": 0.00010645692473835425,
+                "JS Divergence": 2.651353085157492e-05
+            },
+            "close": {
+                "KL Divergence": 0.00018620156137960447,
+                "JS Divergence": 4.650617926342114e-05
+            },
+            "low": {
+                "KL Divergence": 0.00015653264656153215,
+                "JS Divergence": 3.902148970848976e-05
+            },
+            "high": {
+                "KL Divergence": 0.00013589028736525605,
+                "JS Divergence": 3.385469610285849e-05
+            },
+            "volume": {
+                "KL Divergence": 0.04076574557159135,
+                "JS Divergence": 0.00990620408331809
+            }
+        },
+        "evaluation_metrics": {
+            "open": {
+                "mse": 4.498232471895549,
+                "correlation": 0.9708284280126545,
+                "wasserstein": 0.8152633308324
+            },
+            "close": {
+                "mse": 7.155743324973446,
+                "correlation": 0.950331946294826,
+                "wasserstein": 0.6603002953797006
+            },
+            "low": {
+                "mse": 5.863970252460345,
+                "correlation": 0.9590714614780245,
+                "wasserstein": 0.5823279070644439
+            },
+            "high": {
+                "mse": 5.241626224358331,
+                "correlation": 0.9607806648729158,
+                "wasserstein": 0.5151916303599049
+            },
+            "volume": {
+                "mse": 287166677608197.06,
+                "correlation": 0.45963891697899323,
+                "wasserstein": 4816907.914893618
+            }
+        },
+        "ks_results": {
+            "open": {
+                "KS Statistic": 0.0851063829787234,
+                "P-value": 0.6887180647227926
+            },
+            "close": {
+                "KS Statistic": 0.06382978723404255,
+                "P-value": 0.9375592054940759
+            },
+            "low": {
+                "KS Statistic": 0.06382978723404255,
+                "P-value": 0.9375592054940759
+            },
+            "high": {
+                "KS Statistic": 0.06382978723404255,
+                "P-value": 0.9375592054940759
+            },
+            "volume": {
+                "KS Statistic": 0.1276595744680851,
+                "P-value": 0.20113944162965236
+            }
+        }
+    },
+    "GOOGL": {
+        "divergences": {
+            "open": {
+                "KL Divergence": 8.398155164859632e-05,
+                "JS Divergence": 2.101906279421868e-05
+            },
+            "close": {
+                "KL Divergence": 0.00015547880061080206,
+                "JS Divergence": 3.8968920248580284e-05
+            },
+            "low": {
+                "KL Divergence": 0.00011459615136625559,
+                "JS Divergence": 2.872315959527683e-05
+            },
+            "high": {
+                "KL Divergence": 0.00011112121097509787,
+                "JS Divergence": 2.7828365117314558e-05
+            },
+            "volume": {
+                "KL Divergence": 0.045004945013134096,
+                "JS Divergence": 0.010760237388209281
+            }
+        },
+        "evaluation_metrics": {
+            "open": {
+                "mse": 2.90001595141066,
+                "correlation": 0.9637600214020874,
+                "wasserstein": 0.4763598216608413
+            },
+            "close": {
+                "mse": 5.3455395019147245,
+                "correlation": 0.9316350714076846,
+                "wasserstein": 0.4687374640210671
+            },
+            "low": {
+                "mse": 3.8478066028380296,
+                "correlation": 0.9514172542434829,
+                "wasserstein": 0.36677408085824126
+            },
+            "high": {
+                "mse": 3.8662053232076055,
+                "correlation": 0.9499126534782649,
+                "wasserstein": 0.284536121700431
+            },
+            "volume": {
+                "mse": 92080365905747.66,
+                "correlation": 0.4522803396160146,
+                "wasserstein": 2472439.021276596
+            }
+        },
+        "ks_results": {
+            "open": {
+                "KS Statistic": 0.07092198581560284,
+                "P-value": 0.8719383973082601
+            },
+            "close": {
+                "KS Statistic": 0.06382978723404255,
+                "P-value": 0.9375592054940759
+            },
+            "low": {
+                "KS Statistic": 0.04964539007092199,
+                "P-value": 0.9953253650035424
+            },
+            "high": {
+                "KS Statistic": 0.0425531914893617,
+                "P-value": 0.9996013482499542
+            },
+            "volume": {
+                "KS Statistic": 0.12056737588652482,
+                "P-value": 0.2576341214017462
+            }
+        }
+    },
+    "MMM": {
+        "divergences": {
+            "open": {
+                "KL Divergence": 8.681359991082331e-05,
+                "JS Divergence": 2.1643753263012792e-05
+            },
+            "close": {
+                "KL Divergence": 0.0001683180377583734,
+                "JS Divergence": 4.20457478601003e-05
+            },
+            "low": {
+                "KL Divergence": 0.0001269351642117912,
+                "JS Divergence": 3.17337272223e-05
+            },
+            "high": {
+                "KL Divergence": 0.00012621267914843964,
+                "JS Divergence": 3.147862756555929e-05
+            },
+            "volume": {
+                "KL Divergence": 0.08787533635913006,
+                "JS Divergence": 0.020720146995848857
+            }
+        },
+        "evaluation_metrics": {
+            "open": {
+                "mse": 1.2187227466454216,
+                "correlation": 0.9795348288078356,
+                "wasserstein": 0.346562499929819
+            },
+            "close": {
+                "mse": 2.364325650115184,
+                "correlation": 0.9595682750444935,
+                "wasserstein": 0.3369920263343995
+            },
+            "low": {
+                "mse": 1.7340285844484704,
+                "correlation": 0.9719675670232368,
+                "wasserstein": 0.4705063273577961
+            },
+            "high": {
+                "mse": 1.8554361237249668,
+                "correlation": 0.9712980147796817,
+                "wasserstein": 0.4616538149260844
+            },
+            "volume": {
+                "mse": 3984313482058.2344,
+                "correlation": 0.23593837960568104,
+                "wasserstein": 618703.9982269503
+            }
+        },
+        "ks_results": {
+            "open": {
+                "KS Statistic": 0.04964539007092199,
+                "P-value": 0.9953253650035424
+            },
+            "close": {
+                "KS Statistic": 0.05673758865248227,
+                "P-value": 0.9778506794449981
+            },
+            "low": {
+                "KS Statistic": 0.07801418439716312,
+                "P-value": 0.78608531010861
+            },
+            "high": {
+                "KS Statistic": 0.07092198581560284,
+                "P-value": 0.8719383973082601
+            },
+            "volume": {
+                "KS Statistic": 0.14184397163120568,
+                "P-value": 0.11725976109454442
+            }
+        }
+    }
+}

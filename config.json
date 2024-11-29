@@ -1,0 +1,13 @@
+{
+    "tickers": ["AAPL", "MSFT"],
+    "features": ["open", "close", "low", "high", "volume"],
+    "start_date": "2020-01-01",
+    "end_date": "2023-12-31",
+    "sequence_length": 5,
+    "epochs": 100,
+    "batch_size": 32,
+    "noise_scale": 1.0,
+    "max_grad_norm": 1.0,
+    "patience": 10,
+    "seed": 42
+}
