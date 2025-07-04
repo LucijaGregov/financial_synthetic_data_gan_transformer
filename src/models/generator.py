@@ -1,125 +1,156 @@
-"""Generator model for financial time series GAN."""
+"""
+Generator module implementing a Transformer-based architecture for synthetic financial data generation.
+"""
 
+from typing import Optional
+import logging
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-from typing import List, Optional
-from ..utils.encoding import generate_day_encoding
-from .attention import TransformerBlock
 
-class Generator(nn.Module):
-    """Transformer-based generator for financial time series.
-    
-    Attributes:
-        noise_dim (int): Dimension of input noise
-        feature_dim (int): Dimension of output features
-        sequence_length (int): Length of generated sequences
+logger = logging.getLogger(__name__)
+
+class TransformerGenerator(nn.Module):
     """
+    Transformer-based generator for financial time series data.
     
+    Uses a transformer encoder architecture to generate synthetic financial data,
+    processing OHLC prices, volume, and cyclic date features.
+    """
+
     def __init__(
         self,
-        noise_dim: int,
-        feature_dim: int,
-        sequence_length: int,
-        hidden_dims: List[int] = [64, 64],
-        num_heads: int = 1
-    ):
-        """Initialize generator.
-        
+        input_size: int,
+        num_layers: int,
+        d_model: int,
+        nhead: int,
+        dim_feedforward: int,
+        output_size: int,
+        dropout: float,
+        num_tickers: int,
+        ticker_embedding_dim: int,
+        noise_dim: int = 8
+    ) -> None:
+        """
+        Initialize the generator.
+
         Args:
-            noise_dim (int): Dimension of input noise
-            feature_dim (int): Dimension of output features
-            sequence_length (int): Length of generated sequences
-            hidden_dims (List[int]): Dimensions of hidden layers
-            num_heads (int): Number of attention heads
+            input_size: Number of input features (OHLC + volume + enabled cyclic features)
+            num_layers: Number of transformer encoder layers
+            d_model: Dimension of the transformer model
+            nhead: Number of attention heads
+            dim_feedforward: Dimension of feedforward network in transformer
+            output_size: Number of output features (same as input_size)
+            dropout: Dropout rate for regularization
         """
         super().__init__()
-        
         self.noise_dim = noise_dim
-        self.feature_dim = feature_dim
-        self.sequence_length = sequence_length
+        self.noise_projection = nn.Linear(noise_dim, d_model)
         
-        # Register day encoding
-        self.register_buffer(
-            'day_encoding',
-            generate_day_encoding(sequence_length, 1)
-        )
-        
-        # Initial projection
-        self.proj = nn.Linear(noise_dim + 2, hidden_dims[0])
+        self.input_size = input_size
+        self.embedding_dim = ticker_embedding_dim
+        self.ticker_embedding = nn.Embedding(num_tickers, ticker_embedding_dim)
 
-        # Positional encoding
-        self.pos_encoding = nn.Parameter(
-            torch.randn(1, sequence_length, hidden_dims[0])
+        self.positional_encoding = nn.Linear(input_size + ticker_embedding_dim, d_model)
+        self.price_linear = nn.Linear(d_model, d_model)
+
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=True
         )
 
-        # Transformer blocks
-        self.transformer_blocks = nn.ModuleList([
-            TransformerBlock(hidden_dims[0], heads=num_heads)
-            # for _ in range(3)
-        ])
-        
-        # Progressive growth layers
-        self.prog_layers = nn.ModuleList([
-            nn.Linear(in_dim, out_dim)
-            for in_dim, out_dim in zip(hidden_dims[:-1], hidden_dims[1:])
-        ])
-        
-        # Output heads
-        self.ohlc_head = nn.Linear(hidden_dims[-1], 4)
-        self.volume_head = nn.Linear(hidden_dims[-1], 1)
-        self.ticker_head = nn.Linear(hidden_dims[-1], feature_dim - 7)
-        self.day_head = nn.Linear(hidden_dims[-1], 2)
-        
-        self.norm = nn.LayerNorm(hidden_dims[-1])
-        self.apply(self._init_weights)
+        self.transformer_encoder = nn.TransformerEncoder(
+            encoder_layer, 
+            num_layers=num_layers
+        )
+
+        self.feature_decoder = nn.Sequential(
+            nn.Linear(d_model, d_model),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(d_model, output_size)
+        )
+
+        self.norm1 = nn.LayerNorm(d_model)
+        self.norm2 = nn.LayerNorm(d_model)
     
-    def _init_weights(self, module: nn.Module):
-        """Initialize network weights.
-        
-        Args:
-            module (nn.Module): Module to initialize
+    def forward(
+        self,
+        src: torch.Tensor, 
+        ticker_idx: torch.Tensor,
+        noise: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
+
+        embed = self.ticker_embedding(ticker_idx).unsqueeze(1).repeat(1, src.shape[1], 1)
+        x = torch.cat([src, embed], dim=-1)
+        x = self.positional_encoding(x)
+        x = self.norm1(x)
+
+        if noise is None:
+            noise = torch.randn(src.size(0), self.noise_dim, device=src.device)
+
+        noise_proj = self.noise_projection(noise)  # Shape: (batch_size, d_model)
+        noise_proj = noise_proj.unsqueeze(1).repeat(1, src.size(1), 1)
+        x = x + noise_proj
+
+        price_features = self.price_linear(x)
+        x = x + price_features
+        x = self.norm2(x)
+
+        output = self.transformer_encoder(x)
+        output = self.feature_decoder(output[:, -1, :])
+        output = self._apply_financial_constraints(output)
+        return output
+
+
+    def _apply_financial_constraints(self, output: torch.Tensor) -> torch.Tensor:
         """
-        if isinstance(module, nn.Linear):
-            nn.init.xavier_uniform_(module.weight)
-            if module.bias is not None:
-                nn.init.constant_(module.bias, 0)
-    
-    def forward(self, noise: torch.Tensor) -> torch.Tensor:
-        """Generate financial time series from noise.
+        Apply financial constraints to generator output.
         
         Args:
-            noise (torch.Tensor): Input noise of shape (batch_size, seq_len, noise_dim)
+            output: Raw generator output of shape (batch_size, output_size)
             
         Returns:
-            torch.Tensor: Generated sequences of shape (batch_size, seq_len, feature_dim)
+            Constrained output respecting financial relationships
         """
-        batch_size = noise.shape[0]
+        # Split output into components
+        open_price = output[:, 0:1]   # Open
+        high_price = output[:, 1:2]   # High
+        low_price = output[:, 2:3]    # Low
+        close_price = output[:, 3:4]  # Close
+        volume = torch.relu(output[:, 4:5])  # Volume must be positive
         
-        # Expand day encoding for batch
-        day_encoding = self.day_encoding.expand(batch_size, -1, -1).to(noise.device)
+        if output.size(1) > 5:  # If we have cyclic features
+            cyclic_features = output[:, 5:]
+        else:
+            cyclic_features = torch.empty(output.size(0), 0, device=output.device)
+
+        # Apply OHLC constraints
+        constrained_ohlc = self._enforce_ohlc_constraints(open_price, high_price, low_price, close_price)
+
+        return torch.cat([constrained_ohlc, volume, cyclic_features], dim=1)
+
+    def _enforce_ohlc_constraints(self, open_p: torch.Tensor, high_p: torch.Tensor,
+                                 low_p: torch.Tensor, close_p: torch.Tensor) -> torch.Tensor:
+        """
+        Enforce OHLC financial constraints:
+        - High >= max(Open, Close)
+        - Low <= min(Open, Close)
         
-        # Concatenate noise and day encoding
-        x = torch.cat([noise, day_encoding], dim=-1)
-        
-        # Project and transform
-        x = self.proj(x)
-        x = x + self.pos_encoding
-        
-        # Apply transformer blocks
-        for block in self.transformer_blocks:
-            x = block(x)
-        
-        # Apply progressive layers
-        for layer in self.prog_layers:
-            x = F.leaky_relu(layer(x), 0.2)
-        
-        x = self.norm(x)
-        
-        # Generate components
-        ohlc = 3.5 * torch.tanh(self.ohlc_head(x))
-        volume = 10 * torch.tanh(self.volume_head(x))
-        ticker = torch.sigmoid(self.ticker_head(x))
-        day = torch.tanh(self.day_head(x))
-        
-        return torch.cat([ohlc, volume, ticker, day], dim=-1)
+        Args:
+            open_p, high_p, low_p, close_p: Individual OHLC price tensors
+            
+        Returns:
+            Constrained OHLC tensor of shape (batch_size, 4)
+        """
+        # High >= max(Open, Close)
+        min_high = torch.max(open_p, close_p)
+        constrained_high = torch.max(high_p, min_high)
+
+        # Low <= min(Open, Close)  
+        max_low = torch.min(open_p, close_p)
+        constrained_low = torch.min(low_p, max_low)
+
+        return torch.cat([open_p, constrained_high, constrained_low, close_p], dim=1)

@@ -1,13 +1,53 @@
 {
-    "tickers": ["AAPL", "MSFT"],
+    "tickers": ["AAPL", "MSFT", "AMZN", "GOOGL", "MMM"],
     "features": ["open", "close", "low", "high", "volume"],
-    "start_date": "2020-01-01",
-    "end_date": "2023-12-31",
-    "sequence_length": 5,
+    "start_date": "2021-12-31",
+    "end_date": "2024-12-31",
+    "sequence_length": 10,
     "epochs": 100,
-    "batch_size": 32,
-    "noise_scale": 1.0,
-    "max_grad_norm": 1.0,
+    "batch_size": 64, 
     "patience": 10,
-    "seed": 42
+    "seed": 42,
+    "paths": {
+        "checkpoint_dir": "checkpoints",
+        "output_dir": "outputs",
+        "data_dir": "data"
+    },
+    "data_params": {
+        "n_volume_features": 1,
+        "cyclic_features": {
+            "day": true,
+            "month": true,
+            "quarter": true
+        }
+    },
+    "model_params": {
+        "ticker_embedding_dim": 8,
+        "generator": {
+            "num_layers": 2,
+            "d_model": 64,
+            "nhead": 2,
+            "dim_feedforward": 128,
+            "dropout": 0.1
+        },
+        "discriminator": {
+            "hidden_sizes": [128, 64],
+            "dropout": 0.1,
+            "leaky_relu_slope": 0.2
+        }
+    },
+    "training_params": {
+        "g_learning_rate": 0.001,
+        "d_learning_rate": 0.001,
+        "scheduler_patience": 3,
+        "scheduler_factor": 0.5,
+        "warmup_epochs": 5,
+        "adv_weight": 0.5,
+        "load_pretrained": true
+    },
+    "run": {
+        "do_train": false,
+        "do_evaluate": false,
+        "do_inference": true
+    }
 }

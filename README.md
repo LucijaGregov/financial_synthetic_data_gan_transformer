@@ -1,13 +1,15 @@
-# Before you start:
+## Before you start:
 
-## 1. Create new environment
-python -m venv .my_venv
+### 1. Create new environment:
+python -m venv .venv
 
-## 2. Activate new environment
-source .my_venv/bin/activate
+### 2. Activate new environment:
+source .venv/bin/activate
 
-## To deactivate
+### To deactivate:
 source deactivate
 
-# Run the code
+### Run the code:
 `python main.py`
+
+Parameters are controlled via `config.json`.

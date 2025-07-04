@@ -1,137 +1,120 @@
-"""Evaluation metrics for generated financial sequences."""
+"""Evaluation metrics for generated financial data"""
 
+import logging
+from typing import Dict, List, Tuple
 import numpy as np
-import torch
-from typing import Dict, Tuple, List
-from scipy import stats
+from scipy.stats import spearmanr, entropy, wasserstein_distance
+from scipy.spatial.distance import jensenshannon
 
-class FinancialMetrics:
-    """Financial time series evaluation metrics.
-    
-    Attributes:
-        real_data (np.ndarray): Real financial sequences
-        generated_data (np.ndarray): Generated financial sequences
+logger = logging.getLogger(__name__)
+
+def calculate_distribution_similarity(true_vals: np.ndarray, pred_vals: np.ndarray) -> Dict[str, float]:
     """
-    
-    def __init__(
-        self,
-        real_data: np.ndarray,
-        generated_data: np.ndarray
-    ):
-        """Initialize metrics calculator.
-        
-        Args:
-            real_data (np.ndarray): Real financial sequences
-            generated_data (np.ndarray): Generated financial sequences
-        """
-        self.real_data = real_data
-        self.generated_data = generated_data
-    
-    def calculate_all_metrics(self) -> Dict[str, float]:
-        """Calculate all evaluation metrics.
-        
-        Returns:
-            Dict[str, float]: Dictionary of metric names and values
-        """
-        return {
-            'price_consistency': self.price_consistency(),
-            'volatility_similarity': self.volatility_similarity(),
-            'return_distribution': self.return_distribution_similarity(),
-            'temporal_correlation': self.temporal_correlation(),
-            'volume_correlation': self.volume_price_correlation()
-        }
-    
-    def price_consistency(self) -> Dict[str, float]:
-        """Check OHLC price consistency.
-        
-        Returns:
-            Dict[str, float]: Price consistency metrics
-        """
-        def check_consistency(data):
-            high = data[..., 1]
-            low = data[..., 2]
-            open_price = data[..., 0]
-            close = data[..., 3]
-            
-            high_valid = np.all(high >= np.maximum(open_price, close))
-            low_valid = np.all(low <= np.minimum(open_price, close))
-            return (high_valid.mean() + low_valid.mean()) / 2
-        
-        real_consistent = check_consistency(self.real_data)
-        gen_consistent = check_consistency(self.generated_data)
-        
-        return {
-            'real': real_consistent,
-            'generated': gen_consistent,
-            'ratio': gen_consistent / real_consistent if real_consistent > 0 else 0
-        }
-    
-    def volatility_similarity(self) -> Dict[str, float]:
-        """Compare volatility patterns.
-        
-        Returns:
-            Dict[str, float]: Volatility similarity metrics
-        """
-        def calculate_volatility(data):
-            returns = np.diff(data[..., 3], axis=1)  # Using close prices
-            return np.std(returns, axis=1)
-        
-        real_vol = calculate_volatility(self.real_data)
-        gen_vol = calculate_volatility(self.generated_data)
-        
-        return {
-            'real_mean': real_vol.mean(),
-            'gen_mean': gen_vol.mean(),
-            'similarity': 1 - np.abs(real_vol.mean() - gen_vol.mean()) / real_vol.mean()
-        }
-    
-    def return_distribution_similarity(self) -> float:
-        """Calculate similarity of return distributions.
-        
-        Returns:
-            float: KS test statistic
-        """
-        real_returns = np.diff(self.real_data[..., 3], axis=1).flatten()
-        gen_returns = np.diff(self.generated_data[..., 3], axis=1).flatten()
-        
-        ks_stat, _ = stats.ks_2samp(real_returns, gen_returns)
-        return 1 - ks_stat  # Higher value means more similar
-    
-    def temporal_correlation(self) -> Dict[str, float]:
-        """Calculate temporal correlation of price movements.
-        
-        Returns:
-            Dict[str, float]: Temporal correlation metrics
-        """
-        def autocorr(data):
-            returns = np.diff(data[..., 3], axis=1)
-            return np.corrcoef(returns[:, :-1].flatten(), returns[:, 1:].flatten())[0, 1]
-        
-        real_corr = autocorr(self.real_data)
-        gen_corr = autocorr(self.generated_data)
-        
-        return {
-            'real': real_corr,
-            'generated': gen_corr,
-            'difference': abs(real_corr - gen_corr)
-        }
-    
-    def volume_price_correlation(self) -> Dict[str, float]:
-        """Calculate volume-price correlation.
-        
-        Returns:
-            Dict[str, float]: Volume-price correlation metrics
-        """
-        def vol_price_corr(data):
-            price_changes = np.abs(np.diff(data[..., 3], axis=1))
-            volume_changes = np.diff(data[..., 4], axis=1)
-            return np.corrcoef(price_changes.flatten(), volume_changes.flatten())[0, 1]
-        
-        real_corr = vol_price_corr(self.real_data)
-        gen_corr = vol_price_corr(self.generated_data)
-        
-        return {
-            'real': real_corr,
-            'generated': gen_corr,
-            'difference': abs(real_corr - gen_corr)
-        }
+    Calculate distribution similarity metrics between true and predicted values.
+
+    Args:
+        true_vals: True values array
+        pred_vals: Predicted values array
+
+    Returns:
+        Dictionary containing distribution similarity metrics
+    """
+    true_hist, _ = np.histogram(true_vals, bins=50, density=True)
+    pred_hist, _ = np.histogram(pred_vals, bins=50, density=True)
+
+    # Add small constant to avoid zero probabilities
+    true_hist += 1e-10
+    pred_hist += 1e-10
+
+    kl_divergence = entropy(true_hist, pred_hist)
+    js_divergence = jensenshannon(true_hist, pred_hist)
+    wasserstein_dist = wasserstein_distance(true_vals, pred_vals)
+
+    return {
+        "kl_divergence": kl_divergence,
+        "js_divergence": js_divergence,
+        "wasserstein_distance": wasserstein_dist
+    }
+
+def evaluate_feature_metrics(true_vals: np.ndarray, pred_vals: np.ndarray) -> Dict[str, float]:
+    """
+    Calculate metrics for a single feature.
+
+    Args:
+        true_vals: True values array
+        pred_vals: Predicted values array
+
+    Returns:
+        Dictionary containing metrics for the feature
+    """
+    mae = np.mean(np.abs(true_vals - pred_vals))
+    mape = np.mean(np.abs((true_vals - pred_vals) / (true_vals + 1e-8))) * 100
+    correlation, _ = spearmanr(true_vals, pred_vals)
+    distribution_metrics = calculate_distribution_similarity(true_vals, pred_vals)
+
+    return {
+        "mae": mae,
+        "mape": mape,
+        "correlation": correlation,
+        **distribution_metrics
+    }
+
+def evaluate_generated_data(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    features: List[str],
+    ticker: str,
+    cyclic_config: Dict[str, bool]
+) -> Dict[str, Dict[str, float]]:
+    """
+    Evaluate generated data against real data using standard metrics.
+
+    Args:
+        y_true: True values array
+        y_pred: Predicted values array
+        features: List of feature names
+        ticker: Ticker symbol
+        cyclic_config: Dictionary configuring which cyclic features are used
+
+    Returns:
+        Dictionary containing evaluation metrics for each feature and cyclic component:
+            Regular features:
+                - mae: Mean Absolute Error
+                - mape: Mean Absolute Percentage Error
+                - correlation: Spearman correlation
+                - kl_divergence: Kullback-Leibler divergence
+                - js_divergence: Jensen-Shannon divergence
+                - wasserstein_distance: Wasserstein distance
+    """
+    metrics = {}
+    logger.info(f"\nEvaluation Metrics for {ticker}:")
+
+    # Evaluate base features (OHLC + volume)
+    for i, feature in enumerate(features):
+        try:
+            feature_metrics = evaluate_feature_metrics(
+                y_true[:, i],
+                y_pred[:, i]
+            )
+            metrics[feature] = feature_metrics
+
+            logger.info(f"Feature: {feature}")
+            logger.info(f"  MAE: {feature_metrics['mae']:.4f}")
+            logger.info(f"  MAPE: {feature_metrics['mape']:.2f}%")
+            logger.info(f"  Correlation: {feature_metrics['correlation']:.4f}")
+            logger.info(f"  KL Divergence: {feature_metrics['kl_divergence']:.4f}")
+            logger.info(f"  JS Divergence: {feature_metrics['js_divergence']:.4f}")
+            logger.info(f"  Wasserstein Distance: {feature_metrics['wasserstein_distance']:.4f}\n")
+
+        except Exception as e:
+            logger.error(f"Error evaluating feature {feature}: {str(e)}")
+            metrics[feature] = {
+                "mae": float('nan'),
+                "mape": float('nan'),
+                "correlation": float('nan'),
+                "kl_divergence": float('nan'),
+                "js_divergence": float('nan'),
+                "wasserstein_distance": float('nan')
+            }
+
+    return metrics

@@ -77,6 +77,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+.ipynb
 
 # IPython
 profile_default/
@@ -166,3 +167,14 @@ data/
 .fin_gan/
 .vscode-upload.json
 .vscode/
+
+# Models
+.pth
+
+# Images
+.png
+.jpg
+
+.csv
+
+checkpoints/

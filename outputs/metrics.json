@@ -1,0 +1,212 @@
+{
+    "AAPL": {
+        "open": {
+            "mae": 1.9159081641663893,
+            "mape": 1.0368609957480122,
+            "correlation": 0.9649447639958617,
+            "kl_divergence": 2.425141951193357,
+            "js_divergence": 0.3180816271949777,
+            "wasserstein_distance": 1.156334951414284
+        },
+        "close": {
+            "mae": 2.3026788589802196,
+            "mape": 1.2659966616218128,
+            "correlation": 0.9301850686547357,
+            "kl_divergence": 0.6154403820500974,
+            "js_divergence": 0.2946555979448226,
+            "wasserstein_distance": 1.3024771399531812
+        },
+        "low": {
+            "mae": 2.1534820989514087,
+            "mape": 1.1793768876855997,
+            "correlation": 0.948031752249946,
+            "kl_divergence": 2.6921699479735044,
+            "js_divergence": 0.3328733048142294,
+            "wasserstein_distance": 1.1777143546030038
+        },
+        "high": {
+            "mae": 2.11505429964539,
+            "mape": 1.1540556501248436,
+            "correlation": 0.9532919930070064,
+            "kl_divergence": 0.4659841104450349,
+            "js_divergence": 0.2953890329500256,
+            "wasserstein_distance": 1.5016176480773509
+        },
+        "volume": {
+            "mae": 10398487.718191165,
+            "mape": 19.712763513697865,
+            "correlation": 0.5274498052142642,
+            "kl_divergence": 0.46151942819625696,
+            "js_divergence": 0.3159838361529493,
+            "wasserstein_distance": 3941243.2474459093
+        }
+    },
+    "MSFT": {
+        "open": {
+            "mae": 6.348108602753771,
+            "mape": 1.7879831963733106,
+            "correlation": 0.9500544224579851,
+            "kl_divergence": 2.3278993469910687,
+            "js_divergence": 0.3668788408885296,
+            "wasserstein_distance": 4.978300919769505
+        },
+        "close": {
+            "mae": 6.573814662635754,
+            "mape": 1.881539160308166,
+            "correlation": 0.9254397136878808,
+            "kl_divergence": 0.865007685574215,
+            "js_divergence": 0.31435148787547423,
+            "wasserstein_distance": 5.337185257715543
+        },
+        "low": {
+            "mae": 6.530720379335662,
+            "mape": 1.8589924633331594,
+            "correlation": 0.9390957583781727,
+            "kl_divergence": 1.3171452793335736,
+            "js_divergence": 0.35189563648504324,
+            "wasserstein_distance": 5.0205526149019315
+        },
+        "high": {
+            "mae": 5.586046800545769,
+            "mape": 1.580469309673188,
+            "correlation": 0.9534674149983128,
+            "kl_divergence": 1.0951763742429463,
+            "js_divergence": 0.27528338831678123,
+            "wasserstein_distance": 4.592722574869795
+        },
+        "volume": {
+            "mae": 5648113.875131247,
+            "mape": 23.822261596705037,
+            "correlation": 0.5848794897041825,
+            "kl_divergence": 0.3468433170036796,
+            "js_divergence": 0.28358384232859357,
+            "wasserstein_distance": 2396465.3039730126
+        }
+    },
+    "AMZN": {
+        "open": {
+            "mae": 2.8221170411887746,
+            "mape": 2.011640269881783,
+            "correlation": 0.9552741026480694,
+            "kl_divergence": 1.6522678550256926,
+            "js_divergence": 0.32821799688398634,
+            "wasserstein_distance": 2.3556683046597957
+        },
+        "close": {
+            "mae": 2.8621948999716036,
+            "mape": 2.066897216644294,
+            "correlation": 0.9272369610374851,
+            "kl_divergence": 1.0561030271855123,
+            "js_divergence": 0.3375393798415038,
+            "wasserstein_distance": 2.045618747143035
+        },
+        "low": {
+            "mae": 2.9312988714123445,
+            "mape": 2.1132666023617883,
+            "correlation": 0.9473541134301181,
+            "kl_divergence": 0.8283375432827224,
+            "js_divergence": 0.3051180346538023,
+            "wasserstein_distance": 2.250958273596797
+        },
+        "high": {
+            "mae": 2.7293980375249336,
+            "mape": 1.9353985252339394,
+            "correlation": 0.9435215875779216,
+            "kl_divergence": 1.1553812413097133,
+            "js_divergence": 0.3283670655024423,
+            "wasserstein_distance": 2.1295589149420993
+        },
+        "volume": {
+            "mae": 10661781.705479046,
+            "mape": 20.817431810611232,
+            "correlation": 0.5050515861124192,
+            "kl_divergence": 0.39817208037464397,
+            "js_divergence": 0.30015491455156856,
+            "wasserstein_distance": 3750039.0964734433
+        }
+    },
+    "GOOGL": {
+        "open": {
+            "mae": 1.9789471457190548,
+            "mape": 1.5079616351504332,
+            "correlation": 0.9325904267701804,
+            "kl_divergence": 2.7050826520650495,
+            "js_divergence": 0.3732061963790089,
+            "wasserstein_distance": 1.3552496619258374
+        },
+        "close": {
+            "mae": 1.8439549655779033,
+            "mape": 1.4178301448413426,
+            "correlation": 0.9075758143448065,
+            "kl_divergence": 1.426935640556343,
+            "js_divergence": 0.2926027680990705,
+            "wasserstein_distance": 1.0145905406762519
+        },
+        "low": {
+            "mae": 1.974808875550615,
+            "mape": 1.519951479501506,
+            "correlation": 0.9190657472832343,
+            "kl_divergence": 2.958650010193095,
+            "js_divergence": 0.38150930128368066,
+            "wasserstein_distance": 1.1810454781173818
+        },
+        "high": {
+            "mae": 1.7027920662088598,
+            "mape": 1.2943240470656747,
+            "correlation": 0.9163102714680973,
+            "kl_divergence": 1.6770207054538395,
+            "js_divergence": 0.3022690582864256,
+            "wasserstein_distance": 0.9505554091000394
+        },
+        "volume": {
+            "mae": 6713000.639958236,
+            "mape": 23.037007470930128,
+            "correlation": 0.5528361659317608,
+            "kl_divergence": 0.32349342553599675,
+            "js_divergence": 0.2611985718974636,
+            "wasserstein_distance": 2183001.4483629987
+        }
+    },
+    "MMM": {
+        "open": {
+            "mae": 1.1524292425060947,
+            "mape": 1.366747479920429,
+            "correlation": 0.9544528769609827,
+            "kl_divergence": 2.218483617269776,
+            "js_divergence": 0.34223841167676294,
+            "wasserstein_distance": 0.6368716625457113
+        },
+        "close": {
+            "mae": 1.503718491141678,
+            "mape": 1.8112925789132501,
+            "correlation": 0.9274162390230768,
+            "kl_divergence": 1.76875193979107,
+            "js_divergence": 0.34463791174515696,
+            "wasserstein_distance": 0.7928274168190386
+        },
+        "low": {
+            "mae": 1.3322785289575023,
+            "mape": 1.5936012348676754,
+            "correlation": 0.9404789170767662,
+            "kl_divergence": 1.8536466678854955,
+            "js_divergence": 0.3499624551078283,
+            "wasserstein_distance": 0.6568163066891068
+        },
+        "high": {
+            "mae": 1.3735793093417554,
+            "mape": 1.6371128527182013,
+            "correlation": 0.9399609143411968,
+            "kl_divergence": 1.7236053366472535,
+            "js_divergence": 0.29778888527003783,
+            "wasserstein_distance": 0.8217368700825575
+        },
+        "volume": {
+            "mae": 1324722.6135344086,
+            "mape": 31.680668933699902,
+            "correlation": 0.45811464531872076,
+            "kl_divergence": 0.8787168407286728,
+            "js_divergence": 0.39968776421281216,
+            "wasserstein_distance": 376533.523516385
+        }
+    }
+}
