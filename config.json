@@ -43,11 +43,11 @@
         "scheduler_factor": 0.5,
         "warmup_epochs": 5,
         "adv_weight": 0.5,
-        "load_pretrained": true
+        "load_pretrained": false
     },
     "run": {
-        "do_train": false,
-        "do_evaluate": false,
-        "do_inference": true
+        "do_train": true,
+        "do_evaluate": true,
+        "do_inference": false
     }
 }
